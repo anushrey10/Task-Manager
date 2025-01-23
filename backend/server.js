@@ -1,28 +1,26 @@
-const express = require ("express");
-const mongoose = require ("mongoose");
-const cors = require ("cors");
-const dotenv = require ("dotenv");
+const express = require('express');
+const mongoose = require('mongoose');
+const cors = require('cors');
+const dotenv = require('dotenv');
 
-dotenv.config(); //load environment variables from the dotenv file
-
-//initialize express app
+// Initialize app and environment variables
+dotenv.config();
 const app = express();
 
-//Middleware
-/*
-app.use(cors());
-app.use(express.json());
-*/
+// Middleware
+app.use(express.json()); // Parse JSON bodies
+app.use(cors()); // Allow cross-origin requests
 
-//connect to MongoDB
-mongoose.connect(process.env.MONGO_URI)
-.then(() => console.log("Connected to MongoDB"))
-.catch(err => console.log("Error connecting to MongoDB",err));
+// Connect to MongoDB
+mongoose
+  .connect(process.env.MONGO_URI)
+  .then(() => console.log('Connected to MongoDB'))
+  .catch((err) => console.error('MongoDB connection error:', err));
 
-//define PORT
-const PORT = process.env.PORT || 6000;
+// Import routes
+app.use('/api/users', require('./routes/userRoutes'));
+app.use('/api/tasks', require('./routes/taskRoutes'));
 
-//start server
-app.listen(PORT, () => {
-    console.log(`Server running on PORT ${PORT}`);
-});
+// Start the server
+const PORT = process.env.PORT || 5000;
+app.listen(PORT, () => console.log(`Server running on port ${PORT}`));

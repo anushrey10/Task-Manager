@@ -1,22 +1,14 @@
 {
-  "name": "task-manager",
+  "name": "task_manager",
   "version": "1.0.0",
-  "description": "Dependencies",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/anushrey10/Task-Manager.git"
+    "dev": "nodemon Backend/server.js"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/anushrey10/Task-Manager/issues"
-  },
-  "homepage": "https://github.com/anushrey10/Task-Manager#readme",
+  "description": "",
   "dependencies": {
     "bcryptjs": "^2.4.3",
     "cors": "^2.8.5",
