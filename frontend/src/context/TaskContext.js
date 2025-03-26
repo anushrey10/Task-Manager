@@ -1,5 +1,5 @@
 import { createContext, useState, useContext, useEffect } from 'react';
-import axios from 'axios';
+import api from '../config/axios';
 import { AuthContext } from './AuthContext';
 
 export const TaskContext = createContext();
@@ -26,7 +26,7 @@ export const TaskProvider = ({ children }) => {
           Authorization: `Bearer ${user.token}`
         }
       };
-      const response = await axios.get('/api/tasks', config);
+      const response = await api.get('/api/tasks', config);
       setTasks(response.data);
       setLoading(false);
     } catch (error) {
@@ -42,7 +42,7 @@ export const TaskProvider = ({ children }) => {
           Authorization: `Bearer ${user.token}`
         }
       };
-      const response = await axios.post('/api/tasks', taskData, config);
+      const response = await api.post('/api/tasks', taskData, config);
       setTasks([...tasks, response.data]);
       return { success: true };
     } catch (error) {
@@ -60,7 +60,7 @@ export const TaskProvider = ({ children }) => {
           Authorization: `Bearer ${user.token}`
         }
       };
-      const response = await axios.put(`/api/tasks/${id}`, taskData, config);
+      const response = await api.put(`/api/tasks/${id}`, taskData, config);
       setTasks(tasks.map(task => task._id === id ? response.data : task));
       return { success: true };
     } catch (error) {
@@ -78,7 +78,7 @@ export const TaskProvider = ({ children }) => {
           Authorization: `Bearer ${user.token}`
         }
       };
-      await axios.delete(`/api/tasks/${id}`, config);
+      await api.delete(`/api/tasks/${id}`, config);
       setTasks(tasks.filter(task => task._id !== id));
       return { success: true };
     } catch (error) {
