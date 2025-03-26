@@ -10,11 +10,39 @@ const app = express();
 // Middleware
 app.use(express.json()); // Parse JSON bodies
 
-// Configure CORS to allow requests from your frontend domain
+// Configure CORS - allow all origins in development
+const allowedOrigins = [
+  'https://task-manager-anushrey10.vercel.app',
+  'https://task-manager-git-main-anushrey10.vercel.app',
+  'https://task-manager-anushrey10s-projects.vercel.app',
+  'http://localhost:3000'
+];
+
 app.use(cors({
-  origin: ['https://task-manager-anushrey10.vercel.app', 'https://task-manager-git-main-anushrey10.vercel.app', 'https://task-manager-anushrey10s-projects.vercel.app', 'http://localhost:3000'],
-  credentials: true
+  origin: function(origin, callback) {
+    // Allow requests with no origin (like mobile apps, curl requests)
+    if (!origin) return callback(null, true);
+    
+    if (allowedOrigins.indexOf(origin) === -1) {
+      console.log('Request from origin:', origin);
+      // Allow anyway for now during testing
+      return callback(null, true);
+    }
+    return callback(null, true);
+  },
+  credentials: true,
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization']
 }));
+
+// Enable preflight requests for all routes
+app.options('*', cors());
+
+// Log all requests for debugging
+app.use((req, res, next) => {
+  console.log(`${req.method} ${req.path} - Origin: ${req.headers.origin || 'unknown'}`);
+  next();
+});
 
 // Simple health check endpoint
 app.get('/api/health', (req, res) => {
