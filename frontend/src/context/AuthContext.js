@@ -17,16 +17,25 @@ export const AuthProvider = ({ children }) => {
 
   const login = async (email, password) => {
     try {
+      console.log('Login attempt with:', email);
+      console.log('API URL being used:', api.defaults.baseURL);
+      
       const response = await api.post('/api/users/login', { email, password });
+      console.log('Login success:', response.data);
+      
       const userData = response.data;
       setUser(userData);
       localStorage.setItem('user', JSON.stringify(userData));
       return { success: true };
     } catch (error) {
       console.error('Login error:', error);
+      console.error('Request failed with status:', error.response?.status);
+      console.error('Error data:', error.response?.data);
+      console.error('Error config:', error.config);
+      
       return { 
         success: false, 
-        message: error.response?.data?.message || 'Login failed'
+        message: error.response?.data?.message || 'Login failed. Server may be down or unreachable.'
       };
     }
   };
@@ -34,6 +43,7 @@ export const AuthProvider = ({ children }) => {
   const register = async (name, email, password) => {
     try {
       console.log('Registration attempt:', { name, email });
+      console.log('API URL being used:', api.defaults.baseURL);
       
       const response = await api.post('/api/users/signup', { name, email, password });
       console.log('Registration response:', response.data);
@@ -44,11 +54,13 @@ export const AuthProvider = ({ children }) => {
       return { success: true };
     } catch (error) {
       console.error('Registration error:', error);
-      console.error('Error details:', error.response?.data);
+      console.error('Request failed with status:', error.response?.status);
+      console.error('Error data:', error.response?.data);
+      console.error('Error config:', error.config);
       
       return { 
         success: false, 
-        message: error.response?.data?.message || 'Registration failed'
+        message: error.response?.data?.message || 'Registration failed. Server may be down or unreachable.'
       };
     }
   };

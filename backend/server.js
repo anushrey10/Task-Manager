@@ -16,6 +16,15 @@ app.use(cors({
   credentials: true
 }));
 
+// Simple health check endpoint
+app.get('/api/health', (req, res) => {
+  res.status(200).json({ 
+    status: 'ok', 
+    message: 'Backend is running', 
+    timestamp: new Date().toISOString() 
+  });
+});
+
 // Connect to MongoDB
 mongoose
   .connect(process.env.MONGO_URI)
