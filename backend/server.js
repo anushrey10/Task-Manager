@@ -12,7 +12,7 @@ app.use(express.json()); // Parse JSON bodies
 
 // Configure CORS to allow requests from your frontend domain
 app.use(cors({
-  origin: ['https://task-manager-anushrey10.vercel.app', 'http://localhost:3000'],
+  origin: ['https://task-manager-anushrey10.vercel.app', 'https://task-manager-git-main-anushrey10.vercel.app', 'https://task-manager-anushrey10s-projects.vercel.app', 'http://localhost:3000'],
   credentials: true
 }));
 
