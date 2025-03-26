@@ -14,7 +14,6 @@ const addTask = async(req, res)=>{
 };
 
 //Update Task
-
 const updateTask = async (req, res)=>{
     const task= await Task.findById(req.params.id);
     if(task.userId.toString() !== req.user.id) return res.status(401).json({ message: 'Unauthorized'});
@@ -24,10 +23,20 @@ const updateTask = async (req, res)=>{
 
 //Delete Task
 const deleteTask= async(req, res) => {
-    const task= await task.findById(req.params.id);
-    if(task.userId.toString() != req.user.id) return res.status(401).json({message: 'Unauthorized'});
-    await task.remove();
-    res.json({message: 'Task Removed'});
+    try {
+        const task = await Task.findById(req.params.id);
+        if(!task) return res.status(404).json({ message: 'Task not found' });
+        
+        if(task.userId.toString() !== req.user.id) {
+            return res.status(401).json({message: 'Unauthorized'});
+        }
+        
+        await Task.findByIdAndDelete(req.params.id);
+        res.json({message: 'Task Removed'});
+    } catch (error) {
+        console.error('Delete task error:', error);
+        res.status(500).json({ message: 'Server Error' });
+    }
 };
 
 module.exports = { getTask, addTask, updateTask, deleteTask };
