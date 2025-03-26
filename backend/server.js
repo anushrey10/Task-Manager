@@ -9,7 +9,12 @@ const app = express();
 
 // Middleware
 app.use(express.json()); // Parse JSON bodies
-app.use(cors()); // Allow cross-origin requests
+
+// Configure CORS to allow requests from your frontend domain
+app.use(cors({
+  origin: ['https://task-manager-anushrey10.vercel.app', 'http://localhost:3000'],
+  credentials: true
+}));
 
 // Connect to MongoDB
 mongoose
